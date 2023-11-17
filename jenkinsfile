@@ -15,17 +15,7 @@ pipeline {
             }
         }
 
-        // stage('Install AWS CLI') {
-        //     steps {
-        //         script {
-        //             sh 'curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
-        //             // sh 'apt-get update && apt-get install -y unzip' // Install unzip
-        //             sh 'unzip awscliv2.zip'
-        //             sh './aws/install'
-        //             sh 'aws --version'
-        //         }
-        //     }
-        // }
+        
 
         stage('Deploy CloudFormation') {
             steps {
@@ -33,8 +23,9 @@ pipeline {
                   //  Install and configure AWS CLI or use AWS SDK
 
                     // Deploy CloudFormation stack
-                    sh 'aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --region ${AWS_DEFAULT_REGION}'
+                    // sh 'aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --region ${AWS_DEFAULT_REGION}'
                     //sh "aws cloudformation deploy --region ${AWS_DEFAULT_REGION} --stack-name ${STACK_NAME} --template-file ${TEMPLATE_FILE} --parameter-overrides \$(cat ${PARAMETERS_FILE})"
+                    sh 'aws cloudformation delete --stack-name ${STACK_NAME}  --region ${AWS_DEFAULT_REGION}'
                 }
             }
         }
