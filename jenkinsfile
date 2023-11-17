@@ -15,17 +15,17 @@ pipeline {
             }
         }
 
-        stage('Install AWS CLI') {
-            steps {
-                script {
-                    sh 'curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
-                    sh 'apt-get update && apt-get install -y unzip' // Install unzip
-                    sh 'unzip awscliv2.zip'
-                    sh './aws/install'
-                    sh 'aws --version'
-                }
-            }
-        }
+        // stage('Install AWS CLI') {
+        //     steps {
+        //         script {
+        //             sh 'curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
+        //             sh 'apt-get update && apt-get install -y unzip' // Install unzip
+        //             sh 'unzip awscliv2.zip'
+        //             sh './aws/install'
+        //             sh 'aws --version'
+        //         }
+        //     }
+        // }
 
         stage('Deploy CloudFormation') {
             steps {
