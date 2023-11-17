@@ -1,0 +1,169 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: A template to deploy vpc and an ec2 instance 
+
+Parameters:
+  vpcCidrBlock:
+    Description: CidrBlock of my MyVPC
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/vpcCidr
+  SubnetCidrBlock:
+    Description: CidrBlock of my sn
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/SNCidr
+  AZ:
+    Description: AZ of my sn
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/AZ
+  ImageId:
+    Description: AMI
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/AMI
+  InstanceType:
+    Description: instance type
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/InstanceType
+  KeyName:
+    Description: private key for instance
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/Keyname
+  ResourceName:
+    Description: name of my resource
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/Resourcename
+  CostCenter:
+    Description: allocating cost
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/CostCenter
+  MapMigration:
+    Description: allocating migration ID
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/MapMigration
+  ProjectCode:
+    Description: allocating project code
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/ProjectCode
+  FundingType:
+    Description: allocating funds
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /desamist/cloud-solutions/FundingType
+  
+
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref vpcCidrBlock 
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: ResourceName
+          Value: !Ref ResourceName
+        - Key: CostCenter
+          Value: !Ref CostCenter
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: ProjectCode
+          Value: !Ref ProjectCode
+        - Key: FundingType
+          Value: !Ref FundingType
+
+  MySubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref SubnetCidrBlock
+      VpcId: !Ref MyVPC
+      #MapPublicIpOnLaunch: true
+      AvailabilityZone: !Ref AZ
+      Tags:
+        - Key: ResourceName
+          Value: !Ref ResourceName
+        - Key: CostCenter
+          Value: !Ref CostCenter
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: ProjectCode
+          Value: !Ref ProjectCode
+        - Key: FundingType
+          Value: !Ref FundingType
+
+  myInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: ResourceName
+          Value: !Ref ResourceName
+        - Key: CostCenter
+          Value: !Ref CostCenter
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: ProjectCode
+          Value: !Ref ProjectCode
+        - Key: FundingType
+          Value: !Ref FundingType
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MyVPC
+      InternetGatewayId: !Ref myInternetGateway
+
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: sg for our ec2 instance
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: ResourceName
+          Value: !Ref ResourceName
+        - Key: CostCenter
+          Value: !Ref CostCenter
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: ProjectCode
+          Value: !Ref ProjectCode
+        - Key: FundingType
+          Value: !Ref FundingType
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref MySubnet
+      SecurityGroupIds: 
+        - !Ref MySecurityGroup
+      KeyName: !Ref KeyName
+      Tags:
+        - Key: ResourceName
+          Value: !Ref ResourceName
+        - Key: CostCenter
+          Value: !Ref CostCenter
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: MapMigration
+          Value: !Ref MapMigration
+        - Key: ProjectCode
+          Value: !Ref ProjectCode
+        - Key: FundingType
+          Value: !Ref FundingType
+
+Outputs:
+    InstanceId:
+      Description: ID of the ec2 instance
+      Value: !Ref MyEC2Instance
+      Export:
+        Name:
+          Fn::Sub: ${AWS::StackName}-InstanceId
