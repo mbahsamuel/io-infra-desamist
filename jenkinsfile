@@ -14,7 +14,7 @@ pipeline {
                 git 'https://github.com/mbahsamuel/io-des-desamist.git' // Replace with the URL of your Git repository
             }
         }
-            stage('Install AWS CLI') {
+        stage('Install AWS CLI') {
             steps{
                 script {
                     sh 'curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"'
@@ -24,8 +24,8 @@ pipeline {
                     sh 'aws --version'
                 }
             }
-
-            stage('Deploy CloudFormation') {
+        }
+        stage('Deploy CloudFormation') {
             steps {
                 script {
                   //  Install and configure AWS CLI or use AWS SDK
@@ -36,5 +36,6 @@ pipeline {
                 }
             }
         }
-    }
+    
 }
+
