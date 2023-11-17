@@ -20,11 +20,7 @@ pipeline {
         stage('Deploy CloudFormation') {
             steps {
                 script {
-                  //  Install and configure AWS CLI or use AWS SDK
-
-                    // Deploy CloudFormation stack
                      sh 'aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --region ${AWS_DEFAULT_REGION}'
-                    //sh "aws cloudformation deploy --region ${AWS_DEFAULT_REGION} --stack-name ${STACK_NAME} --template-file ${TEMPLATE_FILE} --parameter-overrides \$(cat ${PARAMETERS_FILE})"
                     //sh 'aws cloudformation delete-stack --stack-name ${STACK_NAME}  --region ${AWS_DEFAULT_REGION}'
                 }
             }
