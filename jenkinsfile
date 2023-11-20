@@ -5,6 +5,7 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1' // Replace with your AWS region
         STACK_NAME = 'desamist-tech' // Replace with your CloudFormation stack name
         TEMPLATE_FILE = 'develop/template.yml' // Replace with the path to your CloudFormation template file
+        IAM_ROLE_ARN = 'arn:aws:iam::052212664127:role/cloudformation-role'
         //PARAMETERS_FILE = 'path/to/your/parameters.json' // Replace with the path to your CloudFormation parameters file
     }
 
@@ -20,7 +21,7 @@ pipeline {
         stage('Deploy CloudFormation') {
             steps {
                 script {
-                    // sh 'aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --region ${AWS_DEFAULT_REGION}'
+                    // sh 'aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --region ${AWS_DEFAULT_REGION} --role-arn ${IAM_ROLE_ARN}'
                     sh 'aws cloudformation delete-stack --stack-name ${STACK_NAME}  --region ${AWS_DEFAULT_REGION}'
                 }
             }
