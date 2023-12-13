@@ -35,8 +35,8 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-east-1'  // Specify the AWS region
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_ACCESS_SECRET_KEY')
         STACK_NAME = 'desamist-tech'  // Specify the CloudFormation stack name
         TEMPLATE_FILE = 'develop/template.yml'  // Specify the CloudFormation template file
       //  PARAMETER_FILE = 'parameters.json'  // Specify the CloudFormation parameter file
@@ -61,10 +61,10 @@ pipeline {
                     def sessionName = 'JenkinsAssumedRole'
 
                     // The name of the Jenkins credentials containing the AWS access key
-                    def awsAccessKeyId = credentials('aws-access-key')
+                    def awsAccessKeyId = credentials('AWS_ACCESS_KEY')
 
                     // The name of the Jenkins credentials containing the AWS secret key
-                    def awsSecretAccessKey = credentials('aws-secret-key')
+                    def awsSecretAccessKey = credentials('AWS_ACCESS_SECRET_KEY')
 
                     // Step 1: Get AWS temporary credentials using STS
                     def stsCredentials = withAWS(region: awsRegion, accessKeyId: awsAccessKeyId, secretAccessKey: awsSecretAccessKey) {
