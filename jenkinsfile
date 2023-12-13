@@ -76,11 +76,12 @@ pipeline {
                     def accessKeyId = stsCredentials.Credentials.AccessKeyId
                     def secretAccessKey = stsCredentials.Credentials.SecretAccessKey
                     def sessionToken = stsCredentials.Credentials.SessionToken
-
+                    def ssmParamName = '/desamist/aws/account/ENV' // Update with your parameter name
+                    def s3Bucket = sh(script: "aws ssm get-parameter --name ${ssmParamName} --query Parameter.Value --output text", returnStdout: true).trim()
                     // Step 2: Use the assumed role credentials to perform AWS actions
                     withAWS(region: awsRegion, accessKeyId: accessKeyId, secretAccessKey: secretAccessKey, sessionToken: sessionToken) {
                         // Your AWS actions go here
-                    sh "aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${STACK_NAME} --capabilities CAPABILITY_IAM --region ${AWS_REGION}"
+                    sh "aws cloudformation deploy --template-file ${TEMPLATE_FILE} --stack-name ${s3Bucket} --capabilities CAPABILITY_IAM --region ${AWS_REGION}"
                     //sh 'aws cloudformation delete-stack --stack-name ${STACK_NAME}  --region ${AWS_REGION}'
                     }
                 }
